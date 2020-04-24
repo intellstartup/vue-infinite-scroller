@@ -1,0 +1,61 @@
+{
+  "name": "template-vue-component",
+  "version": "1.0.0",
+  "author": "katashin",
+  "private": true,
+  "description": "Boilerplate for standalone Vue.js components",
+  "keywords": [
+    "component",
+    "Vue.js"
+  ],
+  "license": "MIT",
+  "main": "dist/template-vue-component.cjs.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/ktsn/template-vue-component",
+  "bugs": "https://github.com/ktsn/template-vue-component/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ktsn/template-vue-component.git"
+  },
+  "scripts": {
+    "prepublishOnly": "npm run release",
+    "clean": "rm -rf dist",
+    "play": "poi --serve --config play.config.js",
+    "build": "bili",
+    "build:play": "poi --prod --config play.config.js",
+    "lint": "eslint --ext js,ts,vue src test",
+    "lint:fix": "npm run lint -- --fix",
+    "test": "npm run lint && npm run test:unit",
+    "test:unit": "jest",
+    "test:dev": "jest --watch",
+    "release": "npm run test && npm run clean && npm run build"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@types/jest": "^25.1.0",
+    "@vue/test-utils": "^1.0.0-beta.20",
+    "babel-core": "^7.0.0-bridge.0",
+    "bili": "^4.8.1",
+    "eslint": "^6.2.1",
+    "eslint-config-ktsn-vue": "^2.0.0",
+    "jest": "^24.9.0",
+    "poi": "^12.7.5",
+    "postcss": "^7.0.17",
+    "prettier": "1.19.1",
+    "prettier-config-ktsn": "^1.0.0",
+    "rollup": "^1.20.1",
+    "rollup-plugin-css-only": "^2.0.0",
+    "rollup-plugin-typescript2": "^0.26.0",
+    "rollup-plugin-vue": "^5.0.1",
+    "ts-jest": "^24.0.2",
+    "ts-loader": "^7.0.0",
+    "typescript": "^3.5.3",
+    "vue": "^2.6.11",
+    "vue-jest": "^3.0.4",
+    "vue-play": "^3.2.1",
+    "vue-template-compiler": "^2.6.11"
+  }
+}
