@@ -1,12 +1,12 @@
+import InfiniteScroller from '../src/InfiniteScroller.vue'
 import Vue from 'vue'
 import { play } from 'vue-play'
-import Counter from '../src/Counter.vue'
 
-Vue.component('counter', Counter)
+Vue.component('infinite-scroller', InfiniteScroller)
 
-play('Counter').add('Normal', {
+play('InfiniteScroller').add('Normal', {
   template: `
-    <counter :value="count" @increment="count += 1" @decrement="count -= 1"></counter>
+    <infinite-scroller></infinite-scroller>
   `,
   data() {
     return {
