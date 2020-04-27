@@ -50,12 +50,14 @@
     "rollup-plugin-css-only": "^2.0.0",
     "rollup-plugin-typescript2": "^0.26.0",
     "rollup-plugin-vue": "^5.0.1",
+    "sass-loader": "^8.0.2",
     "ts-jest": "^24.0.2",
     "ts-loader": "^7.0.0",
     "typescript": "^3.5.3",
     "vue": "^2.6.11",
     "vue-jest": "^3.0.4",
     "vue-play": "^3.2.1",
+    "vue-property-decorator": "^8.4.2",
     "vue-template-compiler": "^2.6.11"
   }
 }
