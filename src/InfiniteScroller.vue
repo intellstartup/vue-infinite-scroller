@@ -121,7 +121,12 @@ export default class InfiniteScroller extends Vue {
     this.attachedRange.begin = Math.max(0, start)
     this.attachedRange.end = Math.min(end, Math.max(0, this.items.length - 1))
 
+    if (!this.items.length) {
+      return
+    }
+
     await this.$nextTick()
+
     this.updateMetadata()
     this.updatePositions()
   }
