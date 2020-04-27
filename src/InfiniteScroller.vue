@@ -74,39 +74,6 @@ export default class InfiniteScroller extends Vue {
     this.init()
   }
 
-  async init() {
-    if (this.isInit) {
-      return
-    }
-
-    await this.$nextTick()
-    await this.getScroller()
-
-    this.isSelfContained = this.scroller === this.$el
-    this.scroller.addEventListener('scroll', this.onScroll.bind(this))
-    this.scroller.classList.add('infinite-scroller__scroller')
-
-    if (getComputedStyle(this.scroller).position === 'static') {
-      this.scroller.style.position = 'relative'
-    }
-
-    if (this.items.length) {
-      this.itemsMetadata = (new Array(
-        this.items.length
-      ) as (ItemMetadata | null)[])
-        .fill(null)
-        .map((m, i) => ({
-          height: 0,
-          width: 0,
-          top: 0,
-          data: this.items[i]
-        }))
-    }
-
-    this.onScroll()
-    this.isInit = true
-  }
-
   async getScroller() {
     if (!this.$el) {
       await this.$nextTick()
@@ -219,6 +186,42 @@ export default class InfiniteScroller extends Vue {
     }
   }
 
+  async init() {
+    if (this.isInit) {
+      return
+    }
+
+    await this.$nextTick()
+    await this.getScroller()
+
+    this.isSelfContained = this.scroller === this.$el
+    this.scroller.addEventListener('scroll', this.onScroll.bind(this))
+    this.scroller.classList.add('infinite-scroller__scroller')
+
+    if (getComputedStyle(this.scroller).position === 'static') {
+      this.scroller.style.position = 'relative'
+    }
+
+    if (this.items.length) {
+      this.itemsMetadata = (new Array(
+        this.items.length
+      ) as (ItemMetadata | null)[])
+        .fill(null)
+        .map((m, i) => ({
+          height: 0,
+          width: 0,
+          top: 0,
+          data: this.items[i]
+        }))
+    }
+
+    await this.fill(0, this.calculatedThreshold.after)
+    await this.$nextTick()
+
+    this.onScroll()
+    this.isInit = true
+  }
+
   async onScroll() {
     const delta = this.scroller.scrollTop - this.anchor.scrollTop
 
@@ -230,20 +233,26 @@ export default class InfiniteScroller extends Vue {
 
     this.anchor.scrollTop = this.scroller.scrollTop
 
-    const lastScreenItemIndex = this.getItem(
+    const lastScreenItem = this.getItem(
       this.anchor.item,
-      this.scroller.offsetHeight
-    ).index
+      this.isSelfContained
+        ? this.scroller.offsetHeight
+        : this.scroller.offsetHeight -
+            Math.min(
+              0,
+              (this.$el as HTMLElement).offsetTop - this.scroller.scrollTop
+            )
+    )
 
     if (delta < 0) {
       this.fill(
         this.anchor.item.index - this.calculatedThreshold.after,
-        lastScreenItemIndex + this.calculatedThreshold.before
+        lastScreenItem.index + this.calculatedThreshold.before
       )
     } else {
       this.fill(
         this.anchor.item.index - this.calculatedThreshold.before,
-        lastScreenItemIndex + this.calculatedThreshold.after
+        lastScreenItem.index + this.calculatedThreshold.after
       )
     }
   }
