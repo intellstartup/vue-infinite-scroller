@@ -88,22 +88,24 @@ export default class InfiniteScroller extends Vue {
     this.attachedRange.begin = Math.max(0, start)
     this.attachedRange.end = Math.min(end, Math.max(0, this.items.length - 1))
 
-    if (!this.items.length) {
-      return
-    }
-
     await this.$nextTick()
 
-    this.updateMetadata()
-    this.updatePositions()
+    if (this.items.length) {
+      await this.updateMetadata()
+      this.updatePositions()
+    }
+
+    if (end >= this.items.length && this.hasMore) {
+      this.$emit('load-more', this.items.length)
+    }
   }
 
-  updateMetadata() {
+  async updateMetadata() {
     const diff = this.items.length - this.itemsMetadata.length
 
     if (diff > 0) {
       this.itemsMetadata = this.itemsMetadata.concat(
-        (new Array(diff) as (ItemMetadata | null)[]).fill(null).map(m => ({
+        (new Array(diff) as (ItemMetadata | null)[]).fill(null).map((m, i) => ({
           height: 0,
           width: 0,
           top: 0
@@ -119,6 +121,8 @@ export default class InfiniteScroller extends Vue {
 
       this.itemsMetadata[i].node = undefined
     }
+
+    await this.$nextTick()
 
     const items = this.$refs.item as HTMLElement[]
 
