@@ -39,7 +39,7 @@ export default class FixedHeight extends Vue {
 </script>
 
 <template>
-  <infinite-scroller :items="items" tag="ul">
+  <infinite-scroller :items="items" :has-more="false">
     <template slot-scope="{ item }">{{ item }}</template>
   </infinite-scroller>
 </template>

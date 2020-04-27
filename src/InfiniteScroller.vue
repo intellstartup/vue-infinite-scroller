@@ -267,6 +267,7 @@ export default class InfiniteScroller extends Vue {
     <div
       v-if="hasMore && attachedRange.end >= items.length - 1"
       class="infinite-scroller__item infinite-scroller__item--placeholder"
+      :style="{ transform: `translate3d(0, ${scrollHeight}px, 0)` }"
     >
       <slot name="loading">Loading...</slot>
     </div>
