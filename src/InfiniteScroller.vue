@@ -7,9 +7,6 @@ import getScrollableParent from './utils/getScrollableParent'
   name: 'infinite-scroller'
 })
 export default class InfiniteScroller extends Vue {
-  @Prop({ type: String, default: () => 'div' })
-  private readonly tag!: string
-
   @Prop({ type: Array, default: () => [] })
   private readonly items!: any[]
 
