@@ -1,24 +1,26 @@
 {
-  "name": "template-vue-component",
+  "name": "vue-infinite-scroller",
   "version": "1.0.0",
-  "author": "katashin",
+  "author": "Rodrigo Waltenberg (rwaltenberg@gmail.com)",
   "private": true,
-  "description": "Boilerplate for standalone Vue.js components",
+  "description": "Infinite scrolling for VueJS",
   "keywords": [
+    "scroller",
+    "infinite scroller",
     "component",
     "Vue.js"
   ],
   "license": "MIT",
-  "main": "dist/template-vue-component.cjs.js",
+  "main": "dist/vue-infinite-scroller.cjs.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/ktsn/template-vue-component",
-  "bugs": "https://github.com/ktsn/template-vue-component/issues",
+  "homepage": "https://github.com/rwaltenberg/vue-infinite-scroller",
+  "bugs": "https://github.com/rwaltenberg/vue-infinite-scroller/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ktsn/template-vue-component.git"
+    "url": "https://github.com/rwaltenberg/vue-infinite-scroller.git"
   },
   "scripts": {
     "prepublishOnly": "npm run release",
@@ -31,7 +33,8 @@
     "test": "npm run lint && npm run test:unit",
     "test:unit": "jest",
     "test:dev": "jest --watch",
-    "release": "npm run test && npm run clean && npm run build"
+    "release": "npm run test && npm run clean && npm run build",
+    "install": "npm run release"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
