@@ -1,29 +1,3 @@
-<template>
-  <div
-    class="infinite-scroller"
-    :class="{ 'infinite-scroller--self-contained': isSelfContained }"
-  >
-    <div
-      v-for="(item, index) in items"
-      :key="index"
-      class="infinite-scroller__item"
-    >
-      <slot :item="item"></slot>
-    </div>
-    <div
-      v-if="isLoading"
-      class="infinite-scroller__item infinite-scroller__item--placeholder"
-    >
-      <slot name="loading">Loading...</slot>
-    </div>
-    <i
-      ref="scrollPlaceholder"
-      class="infinite-scroller__scroll-placeholder"
-      :style="{ transform: `translate3d(0, ${scrollHeight}px, 0)` }"
-    ></i>
-  </div>
-</template>
-
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
@@ -90,6 +64,32 @@ export default class InfiniteScroller extends Vue {
   onScroll() {}
 }
 </script>
+
+<template>
+  <div
+    class="infinite-scroller"
+    :class="{ 'infinite-scroller--self-contained': isSelfContained }"
+  >
+    <div
+      v-for="(item, index) in items"
+      :key="index"
+      class="infinite-scroller__item"
+    >
+      <slot :item="item"></slot>
+    </div>
+    <div
+      v-if="isLoading"
+      class="infinite-scroller__item infinite-scroller__item--placeholder"
+    >
+      <slot name="loading">Loading...</slot>
+    </div>
+    <i
+      ref="scrollPlaceholder"
+      class="infinite-scroller__scroll-placeholder"
+      :style="{ transform: `translate3d(0, ${scrollHeight}px, 0)` }"
+    ></i>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .infinite-scroller {
