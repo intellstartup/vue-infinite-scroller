@@ -2,7 +2,7 @@
   "name": "vue-infinite-scroller",
   "version": "1.0.0",
   "author": "Rodrigo Waltenberg (rwaltenberg@gmail.com)",
-  "private": true,
+  "private": false,
   "description": "Infinite scrolling for VueJS",
   "keywords": [
     "scroller",
