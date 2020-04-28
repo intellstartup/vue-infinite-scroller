@@ -6,8 +6,8 @@ import getScrollableParent from './utils/getScrollableParent'
 interface ItemMetadata {
   height: number
   width: number
-  data?: any
-  node?: HTMLElement
+  data: any | null
+  node: HTMLElement | null
   top: number
 }
 
@@ -108,19 +108,14 @@ export default class InfiniteScroller extends Vue {
         (new Array(diff) as (ItemMetadata | null)[]).fill(null).map((m, i) => ({
           height: 0,
           width: 0,
-          top: 0
+          top: 0,
+          data: null,
+          node: null
         }))
       )
     }
 
-    for (let i = 0; i < this.items.length; i++) {
-      if (i === this.attachedRange.begin) {
-        i = this.attachedRange.end - 1
-        continue
-      }
-
-      this.itemsMetadata[i].node = undefined
-    }
+    this.itemsMetadata.forEach(m => (m.node = null))
 
     await this.$nextTick()
 
@@ -215,7 +210,8 @@ export default class InfiniteScroller extends Vue {
           height: 0,
           width: 0,
           top: 0,
-          data: this.items[i]
+          data: this.items[i],
+          node: null
         }))
     }
 
@@ -292,7 +288,7 @@ export default class InfiniteScroller extends Vue {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .infinite-scroller {
   &__scroll-placeholder {
     position: absolute;
