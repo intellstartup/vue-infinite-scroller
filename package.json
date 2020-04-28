@@ -1,6 +1,6 @@
 {
-  "name": "vue-infinite-scroller",
-  "version": "1.0.0",
+  "name": "vue-infinity-scroller",
+  "version": "1.0.2",
   "author": "Rodrigo Waltenberg (rwaltenberg@gmail.com)",
   "private": false,
   "description": "Infinite scrolling for VueJS",
@@ -11,16 +11,16 @@
     "Vue.js"
   ],
   "license": "MIT",
-  "main": "dist/vue-infinite-scroller.cjs.js",
+  "main": "dist/vue-infinity-scroller.cjs.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/rwaltenberg/vue-infinite-scroller",
-  "bugs": "https://github.com/rwaltenberg/vue-infinite-scroller/issues",
+  "homepage": "https://github.com/rwaltenberg/vue-infinity-scroller",
+  "bugs": "https://github.com/rwaltenberg/vue-infinity-scroller/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rwaltenberg/vue-infinite-scroller.git"
+    "url": "https://github.com/rwaltenberg/vue-infinity-scroller.git"
   },
   "scripts": {
     "prepublishOnly": "npm run release",
@@ -59,7 +59,10 @@
     "vue": "^2.6.11",
     "vue-jest": "^3.0.4",
     "vue-play": "^3.2.1",
-    "vue-property-decorator": "^8.4.2",
     "vue-template-compiler": "^2.6.11"
+  },
+  "dependencies": {
+    "vue-runtime-helpers": "^1.1.2",
+    "vue-property-decorator": "^8.4.2"
   }
 }

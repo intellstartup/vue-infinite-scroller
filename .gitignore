@@ -5,3 +5,4 @@ node_modules/
 /dist-play/
 /.tmp/
 /.rpt2_cache/
+.DS_Store
