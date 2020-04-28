@@ -23,7 +23,7 @@ export default class InfiniteScroller extends Vue {
   @Prop({ type: Array, default: () => [] })
   private readonly items!: any[]
 
-  @Prop({ type: Boolean, default: true })
+  @Prop({ type: Boolean, default: false })
   private readonly hasMore!: boolean
 
   @Prop({ type: [Number, Array], default: () => [50, 10] })
