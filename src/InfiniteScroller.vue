@@ -29,6 +29,12 @@ export default class InfiniteScroller extends Vue {
   @Prop({ type: [Number, Array], default: () => [50, 10] })
   private readonly threshold!: number | [number, number]
 
+  @Prop({ type: String, default: () => 'div' })
+  private readonly tag!: string
+
+  @Prop({ type: String, default: () => 'div' })
+  private readonly itemTag!: string
+
   private isInit: boolean = false
 
   private isSelfContained: boolean = false
@@ -260,11 +266,13 @@ export default class InfiniteScroller extends Vue {
 </script>
 
 <template>
-  <div
+  <component
+    :is="tag"
     class="infinite-scroller"
     :class="{ 'infinite-scroller--self-contained': isSelfContained }"
   >
-    <div
+    <component
+      :is="itemTag"
       v-for="item in attached"
       :key="item.index"
       ref="item"
@@ -272,31 +280,34 @@ export default class InfiniteScroller extends Vue {
       :style="{ transform: `translate3d(0, ${item.top}px, 0)` }"
     >
       <slot :item="item.data"></slot>
-    </div>
-    <div
+    </component>
+    <component
+      :is="itemTag"
       v-if="hasMore && attachedRange.end >= items.length - 1"
       class="infinite-scroller__item infinite-scroller__item--placeholder"
       :style="{ transform: `translate3d(0, ${scrollHeight}px, 0)` }"
     >
       <slot name="loading">Loading...</slot>
-    </div>
-    <i
+    </component>
+    <component
+      :is="itemTag"
       ref="scrollPlaceholder"
       class="infinite-scroller__scroll-placeholder"
       :style="{ transform: `translate3d(0, ${scrollHeight}px, 0)` }"
-    ></i>
-  </div>
+    ></component>
+  </component>
 </template>
 
 <style lang="scss">
 .infinite-scroller {
   &__scroll-placeholder {
-    position: absolute;
+    display: block;
     height: 1px;
-    width: 1px;
     opacity: 0;
     pointer-events: none;
+    position: absolute;
     transition: transform 0.2s;
+    width: 1px;
   }
 
   &__item {
