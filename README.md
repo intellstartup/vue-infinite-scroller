@@ -49,8 +49,8 @@ Don't forget to import the css then:
 </infinite-scroller>
 ```
 
-| :exclamation |  The component must be contained in (or be itself) a scrollable container by having a height and `overflow` with values `scroll` or `auto`|
-|--------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| ❗️ |  The component must be contained in (or be itself) a scrollable container by having a height and `overflow` with values `scroll` or `auto`|
+|----|-------------------------------------------------------------------------------------------------------------------------------------------|
 
 ### Dynamic content
 The component has a `@load-more` event that is called when the scroll approaches it's end and property `has-more` is set to `true`. The payload sent by the event is the index of the first needed element (i.e. the size of the `items` array):
@@ -63,26 +63,29 @@ The component has a `@load-more` event that is called when the scroll approaches
 
 ## Properties
 
-| Prop     | Type    | Default  | Description                               |
-| -------- | ------- | ---------| ----------------------------------------- |
-| items    | Array   | `[]`     | Array of items to be iterated on the list |
-| has-more | Boolean | `false`  | Flag to inform the container that there are more items to be loaded
+| Prop     | Type    | Default  | Description                                                         |
+| -------- | ------- | ---------| ------------------------------------------------------------------- |
+| items    | Array   | `[]`     | Array of items to be iterated on the list                           |
+| has-more | Boolean | `false`  | Flag to inform the container that there are more items to be loaded |
 | threshold | Number or Array | `[50, 10]` | The number of items to be loaded before and after the ones visible on the list (*if the value is a number, it will be converter to an array with the same number repeated twice*) |
-| tag      | String  | `"div"`  | The tag name to be used for the container |
-| item-tag | String  | `"div"`  | The tag name to be used for the items     |
+| tag      | String  | `"div"`  | The tag name to be used for the container                           |
+| item-tag | String  | `"div"`  | The tag name to be used for the items                               |
 
 ## Events
-| Event | Payload | Description |
-| ----- | ------- | ------------|
-| load-more | `from: Number` | Called when the list is `{ threshold }` items close to it's end.
+
+| Event     | Payload        | Description                                                      |
+| --------- | -------------- | ---------------------------------------------------------------- |
+| load-more | `from: Number` | Called when the list is `{ threshold }` items close to it's end. |
 
 ## Slots
-| Slot name | Scope           | Default    | Description                        |
-| --------- | --------------- | ---------- | ---------------------------------- |
-| default   | `{ item: Any }` | -          | each item being loaded on the list |
-| loading   | -               | Loading... | the item with a loading message at the end of the list
+
+| Slot name | Scope           | Default    | Description                                            |
+| --------- | --------------- | ---------- | ------------------------------------------------------ |
+| default   | `{ item: Any }` | -          | each item being loaded on the list                     |
+| loading   | -               | Loading... | the item with a loading message at the end of the list |
 
 # Contributing
+
 1. Fork this repository.
 2. Create new branch with feature name.
 3. Run `npm install` and `npm run play`.
