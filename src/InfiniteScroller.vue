@@ -115,7 +115,7 @@ export default class InfiniteScroller extends Vue {
           height: 0,
           width: 0,
           top: 0,
-          data: null,
+          data: this.items[this.itemsMetadata.length + i],
           node: null
         }))
       )
@@ -125,12 +125,12 @@ export default class InfiniteScroller extends Vue {
 
     await this.$nextTick()
 
-    const items = this.$refs.item as HTMLElement[]
+    const nodes = this.$refs.item as HTMLElement[]
 
     for (let i = this.attachedRange.begin; i <= this.attachedRange.end; i++) {
       const meta = this.itemsMetadata[i]
 
-      meta.node = items[i - this.attachedRange.begin]
+      meta.node = nodes[i - this.attachedRange.begin]
       meta.width = meta.node.offsetWidth
       meta.height = meta.node.offsetHeight
       meta.data = this.items[i]
@@ -228,6 +228,7 @@ export default class InfiniteScroller extends Vue {
     this.isInit = true
   }
 
+  @Watch('items', { immediate: false })
   async onScroll() {
     const delta = this.scroller.scrollTop - this.anchor.scrollTop
 
