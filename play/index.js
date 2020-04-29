@@ -1,4 +1,3 @@
-import FixedHeight from './scenarios/FixedHeight.vue'
 import InfiniteScroller from '../src/InfiniteScroller.vue'
 import Vue from 'vue'
 import { play } from 'vue-play'
