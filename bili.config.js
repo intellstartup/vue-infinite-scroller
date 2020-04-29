@@ -14,12 +14,15 @@ function capitalize(name) {
   return camelized[0].toUpperCase() + camelized.slice(1)
 }
 
+let name = pkg.name.split('/')
+name = name[name.length - 1]
+
 module.exports = {
   input: 'src/index.ts',
   output: {
-    fileName: `${pkg.name}.[format][min][ext]`,
+    fileName: `${name}.[format][min][ext]`,
     format: ['cjs', 'es', 'umd', 'umd-min'],
-    moduleName: capitalize(pkg.name)
+    moduleName: capitalize(name)
   },
 
   banner,
@@ -38,10 +41,6 @@ module.exports = {
       tsconfig: './tsconfig.main.json',
       clean: true,
       typescript: require('typescript')
-    },
-
-    'css-only': {
-      output: 'dist/' + pkg.name + '.css'
     }
   }
 }
