@@ -41,7 +41,7 @@ play('InfiniteScroller')
     template: `
     <div style="overflow: auto; height: calc(100vh - 20px)">
       <p style="margin: 50px 0">Lorem ipsum dolor sit amet</p>
-      <infinite-scroller :items="items" :has-more="false">
+      <infinite-scroller :items="items">
         <template slot-scope="{item}">{{ item }}</template>
       </infinite-scroller>
     </div>
@@ -54,9 +54,30 @@ play('InfiniteScroller')
       }
     },
     template: `
-      <infinite-scroller :items="items" :has-more="false" style="overflow: auto; height: 150px">
+      <infinite-scroller :items="items" style="overflow: auto; height: 150px">
         <template slot-scope="{item}">{{ item }}</template>
       </infinite-scroller>
+    `
+  })
+  .add('Variable height', {
+    data() {
+      return {
+        items: items.slice().map(m => ({ open: false, data: m }))
+      }
+    },
+    template: `
+      <div>
+        <p>Click on any item to have their height changed:</p>
+        <infinite-scroller :items="items" :threshold="2" style="overflow: auto; height: 250px">
+          <div
+            slot-scope="{item}"
+            @click="item.open = !item.open"
+            :style="{ padding: item.open ? '10px' : '0', border: item.open ? '1px solid black' : '0' }"
+          >
+            {{ item.data }}
+          </div>
+        </infinite-scroller>
+      </div>
     `
   })
   .add('Dynamic content', {

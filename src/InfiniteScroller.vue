@@ -4,6 +4,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator'
 import getScrollableParent from './utils/getScrollableParent'
 
 interface ItemMetadata {
+  index: number
   height: number
   width: number
   data: any | null
@@ -48,12 +49,19 @@ export default class InfiniteScroller extends Vue {
     end: 0
   }
 
+  private shouldAttachRange = {
+    begin: 0,
+    end: 0
+  }
+
   private scrollHeight: number = 0
 
   private anchor = {
     scrollTop: 0,
     item: { index: 0, offset: 0 } as AnchorItemData
   }
+
+  private observer: MutationObserver | null = null
 
   get attached() {
     return this.itemsMetadata.slice(
@@ -76,10 +84,6 @@ export default class InfiniteScroller extends Vue {
     }
   }
 
-  async mounted() {
-    this.init()
-  }
-
   async getScroller() {
     if (!this.$el) {
       await this.$nextTick()
@@ -90,6 +94,17 @@ export default class InfiniteScroller extends Vue {
     this.scroller = getScrollableParent(this.$el as HTMLElement, false, true)
   }
 
+  async fillInitial() {
+    await this.fill(this.attachedRange.begin, this.attachedRange.end + 1)
+
+    if (
+      this.attached.length < this.items.length &&
+      this.scroller.offsetHeight > this.scrollHeight
+    ) {
+      await this.fillInitial()
+    }
+  }
+
   async fill(start: number, end: number) {
     this.attachedRange.begin = Math.max(0, start)
     this.attachedRange.end = Math.min(end, Math.max(0, this.items.length - 1))
@@ -97,7 +112,7 @@ export default class InfiniteScroller extends Vue {
     await this.$nextTick()
 
     if (this.items.length) {
-      await this.updateMetadata()
+      this.updateMetadata()
       this.updatePositions()
     }
 
@@ -106,33 +121,42 @@ export default class InfiniteScroller extends Vue {
     }
   }
 
-  async updateMetadata() {
+  updateMetadata() {
     const diff = this.items.length - this.itemsMetadata.length
 
     if (diff > 0) {
       this.itemsMetadata = this.itemsMetadata.concat(
         (new Array(diff) as (ItemMetadata | null)[]).fill(null).map((m, i) => ({
+          index: this.itemsMetadata.length - 1 + i,
           height: 0,
           width: 0,
           top: 0,
-          data: this.items[this.itemsMetadata.length + i],
+          data: this.items[this.itemsMetadata.length - 1 + i],
           node: null
         }))
       )
     }
 
     this.itemsMetadata.forEach(m => (m.node = null))
+    const nodes = this.$el.querySelectorAll<HTMLElement>(
+      ':scope > .infinite-scroller__item'
+    )
 
-    await this.$nextTick()
+    if (this.attachedRange.begin === this.attachedRange.end) {
+      return
+    }
 
-    const nodes = this.$refs.item as HTMLElement[]
-
-    for (let i = this.attachedRange.begin; i <= this.attachedRange.end; i++) {
+    for (let i = this.attachedRange.begin; i < this.attachedRange.end; i++) {
       const meta = this.itemsMetadata[i]
+      const node = nodes[i - this.attachedRange.begin]
 
-      meta.node = nodes[i - this.attachedRange.begin]
-      meta.width = meta.node.offsetWidth
-      meta.height = meta.node.offsetHeight
+      if (!node) {
+        return
+      }
+
+      meta.node = node
+      meta.width = node.offsetWidth
+      meta.height = node.offsetHeight
       meta.data = this.items[i]
     }
   }
@@ -191,6 +215,54 @@ export default class InfiniteScroller extends Vue {
     }
   }
 
+  updateAnchor(delta: number) {
+    if (this.scroller.scrollTop === 0) {
+      this.anchor.item = { index: 0, offset: 0 }
+    } else {
+      this.anchor.item = this.getItem(this.anchor.item, delta)
+    }
+
+    this.anchor.scrollTop = this.scroller.scrollTop
+  }
+
+  getVisibleItems() {
+    const lastScreenItem = this.getItem(
+      this.anchor.item,
+      this.isSelfContained
+        ? this.scroller.offsetHeight
+        : this.scroller.offsetHeight -
+            Math.min(
+              0,
+              (this.$el as HTMLElement).offsetTop - this.scroller.scrollTop
+            )
+    )
+
+    return {
+      first: this.anchor.item,
+      last: lastScreenItem
+    }
+  }
+
+  @Watch('items.length', { immediate: false })
+  async onScroll() {
+    const delta = this.scroller.scrollTop - this.anchor.scrollTop
+    this.updateAnchor(delta)
+
+    const visible = this.getVisibleItems()
+
+    if (delta < 0) {
+      await this.fill(
+        visible.first.index - this.calculatedThreshold.after,
+        visible.last.index + this.calculatedThreshold.before
+      )
+    } else {
+      await this.fill(
+        visible.first.index - this.calculatedThreshold.before,
+        visible.last.index + this.calculatedThreshold.after
+      )
+    }
+  }
+
   async init() {
     if (this.isInit) {
       return
@@ -208,11 +280,10 @@ export default class InfiniteScroller extends Vue {
     }
 
     if (this.items.length) {
-      this.itemsMetadata = (new Array(
-        this.items.length
-      ) as (ItemMetadata | null)[])
+      this.itemsMetadata = new Array(this.items.length)
         .fill(null)
-        .map((m, i) => ({
+        .map<ItemMetadata>((m, i) => ({
+          index: i,
           height: 0,
           width: 0,
           top: 0,
@@ -221,47 +292,54 @@ export default class InfiniteScroller extends Vue {
         }))
     }
 
-    await this.fill(0, this.calculatedThreshold.after)
+    this.observer = new MutationObserver(async mutations => {
+      const relevant = mutations.filter(
+        m => m.type === 'attributes' || m.target !== this.scroller
+      )
+
+      if (!relevant.length) {
+        return
+      }
+
+      await this.$nextTick()
+
+      const attachedHeight = this.attached.reduce(
+        (sum, item) => sum + item.height,
+        0
+      )
+
+      this.updateMetadata()
+      this.updatePositions()
+
+      await this.$nextTick()
+
+      const newHeight = this.attached.reduce(
+        (sum, item) => sum + item.height,
+        0
+      )
+
+      const heightDiff = newHeight - attachedHeight
+
+      if (heightDiff < 0) {
+        this.scrollHeight += heightDiff
+      }
+    })
+
+    this.observer.observe(this.scroller, {
+      attributes: true,
+      childList: true,
+      subtree: true
+    })
+
+    await this.fillInitial()
     await this.$nextTick()
 
     this.onScroll()
     this.isInit = true
   }
 
-  @Watch('items', { immediate: false })
-  async onScroll() {
-    const delta = this.scroller.scrollTop - this.anchor.scrollTop
-
-    if (this.scroller.scrollTop === 0) {
-      this.anchor.item = { index: 0, offset: 0 }
-    } else {
-      this.anchor.item = this.getItem(this.anchor.item, delta)
-    }
-
-    this.anchor.scrollTop = this.scroller.scrollTop
-
-    const lastScreenItem = this.getItem(
-      this.anchor.item,
-      this.isSelfContained
-        ? this.scroller.offsetHeight
-        : this.scroller.offsetHeight -
-            Math.min(
-              0,
-              (this.$el as HTMLElement).offsetTop - this.scroller.scrollTop
-            )
-    )
-
-    if (delta < 0) {
-      this.fill(
-        this.anchor.item.index - this.calculatedThreshold.after,
-        lastScreenItem.index + this.calculatedThreshold.before
-      )
-    } else {
-      this.fill(
-        this.anchor.item.index - this.calculatedThreshold.before,
-        lastScreenItem.index + this.calculatedThreshold.after
-      )
-    }
+  async mounted() {
+    this.init()
   }
 }
 </script>
@@ -275,7 +353,7 @@ export default class InfiniteScroller extends Vue {
     <component
       :is="itemTag"
       v-for="item in attached"
-      :key="item.index"
+      :key="`item-${item.index}`"
       ref="item"
       class="infinite-scroller__item"
       :style="{ transform: `translate3d(0, ${item.top}px, 0)` }"
