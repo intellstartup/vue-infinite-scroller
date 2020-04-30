@@ -1,6 +1,6 @@
 {
-  "name": "vue-infinity-scroller",
-  "version": "1.0.8",
+  "name": "@bgds/infinite-scroller",
+  "version": "1.0.0",
   "author": "Rodrigo Waltenberg (rwaltenberg@gmail.com)",
   "private": false,
   "description": "Infinite scrolling for VueJS",
@@ -16,11 +16,11 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/rwaltenberg/vue-infinity-scroller",
-  "bugs": "https://github.com/rwaltenberg/vue-infinity-scroller/issues",
+  "homepage": "https://github.com/buildgroupai/vue-infinite-scroller",
+  "bugs": "https://github.com/buildgroupai/vue-infinite-scroller/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rwaltenberg/vue-infinity-scroller.git"
+    "url": "https://github.com/buildgroupai/vue-infinite-scroller.git"
   },
   "scripts": {
     "prepublishOnly": "npm run release",
@@ -36,15 +36,15 @@
     "release": "npm run test && npm run clean && npm run build"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
+    "@babel/core": "^7.9.6",
     "@types/jest": "^25.1.0",
     "@vue/test-utils": "^1.0.0-beta.20",
     "babel-core": "^7.0.0-bridge.0",
-    "bili": "^4.8.1",
+    "bili": "^4.9.4",
     "eslint": "^6.2.1",
     "eslint-config-ktsn-vue": "^2.0.0",
     "jest": "^24.9.0",
-    "poi": "^12.7.5",
+    "poi": "^12.8.0",
     "postcss": "^7.0.17",
     "prettier": "1.19.1",
     "prettier-config-ktsn": "^1.0.0",
@@ -54,7 +54,7 @@
     "rollup-plugin-vue": "^5.0.1",
     "sass-loader": "^8.0.2",
     "ts-jest": "^24.0.2",
-    "ts-loader": "^7.0.0",
+    "ts-loader": "^7.0.2",
     "typescript": "^3.5.3",
     "vue": "^2.6.11",
     "vue-jest": "^3.0.4",

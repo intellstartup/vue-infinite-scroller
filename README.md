@@ -1,4 +1,4 @@
-# Infinity Scroller
+# Infinite Scroller
 
 A VueJS 2.6 infinite scrolling component
 
@@ -12,21 +12,21 @@ A VueJS 2.6 infinite scrolling component
 ## Installation
 
 ```sh
-npm install --save vue-infinity-scroller
+npm install --save @bgds/infinite-scroller
 ```
 
 You can install it globally from the default import:
 ```javascript
 import Vue from 'vue'
-import scroller from 'vue-infinity-scroller'
-import from 'vue-infinity-scroller/dist/vue-infinity-scroller.cjs.css'
+import scroller from '@bgds/infinite-scroller'
+import from '@bgds/infinite-scroller/dist/infinite-scroller.cjs.css'
 
 Vue.use(scroller)
 ```
 
 Or locally using the named import:
 ```javascript
-import { InfiniteScroller } from 'vue-infinity-scroller'
+import { InfiniteScroller } from '@bgds/infinite-scroller'
 
 export default {
   components: {
@@ -37,7 +37,7 @@ export default {
 
 Don't forget to import the css then:
 ```css
-@import '~vue-infinity-scroller/dist/vue-infinity-scroller.cjs'
+@import '~@bgds/infinite-scroller/dist/infinite-scroller.cjs'
 ```
 
 ## Getting Started
