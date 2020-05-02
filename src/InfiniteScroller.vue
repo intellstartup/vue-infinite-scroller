@@ -127,11 +127,11 @@ export default class InfiniteScroller extends Vue {
     if (diff > 0) {
       this.itemsMetadata = this.itemsMetadata.concat(
         (new Array(diff) as (ItemMetadata | null)[]).fill(null).map((m, i) => ({
-          index: this.itemsMetadata.length - 1 + i,
+          index: this.itemsMetadata.length + i,
           height: 0,
           width: 0,
           top: 0,
-          data: this.items[this.itemsMetadata.length - 1 + i],
+          data: this.items[this.itemsMetadata.length + i],
           node: null
         }))
       )
@@ -166,7 +166,7 @@ export default class InfiniteScroller extends Vue {
     let i = this.anchor.item.index
 
     while (i > this.attachedRange.begin) {
-      curPos -= this.itemsMetadata[i].height
+      curPos -= this.itemsMetadata[i - 1].height
       i--
     }
 

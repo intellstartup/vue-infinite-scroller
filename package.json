@@ -1,6 +1,6 @@
 {
   "name": "@bgds/infinite-scroller",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Rodrigo Waltenberg (rwaltenberg@gmail.com)",
   "private": false,
   "description": "Infinite scrolling for VueJS",
@@ -11,7 +11,7 @@
     "Vue.js"
   ],
   "license": "MIT",
-  "main": "dist/vue-infinity-scroller.cjs.js",
+  "main": "dist/infinite-scroller.cjs.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"

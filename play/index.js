@@ -72,7 +72,7 @@ play('InfiniteScroller')
           <div
             slot-scope="{item}"
             @click="item.open = !item.open"
-            :style="{ padding: item.open ? '10px' : '0', border: item.open ? '1px solid black' : '0' }"
+            :style="{ padding: item.open ? '30px 10px' : '0', border: item.open ? '1px solid black' : '0' }"
           >
             {{ item.data }}
           </div>
