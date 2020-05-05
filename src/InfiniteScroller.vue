@@ -400,7 +400,7 @@ export default class InfiniteScroller extends Vue {
       :is="itemTag"
       ref="scrollPlaceholder"
       class="infinite-scroller__scroll-placeholder"
-      :style="{ top: `${scrollHeight}px,` }"
+      :style="{ top: `${scrollHeight}px` }"
     ></component>
   </component>
 </template>
