@@ -1,5 +1,6 @@
 <script lang="ts">
 import Vue from 'vue'
+import throttle from 'lodash.throttle'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import getScrollableParent from './utils/getScrollableParent'
 
@@ -299,8 +300,11 @@ export default class InfiniteScroller extends Vue {
     await this.getScroller()
 
     this.isSelfContained = this.scroller === this.$el
-    this.scroller.addEventListener('scroll', this.onScroll.bind(this))
     this.scroller.classList.add('infinite-scroller__scroller')
+    this.scroller.addEventListener(
+      'scroll',
+      throttle(this.onScroll.bind(this), 16) // 60fps ~= 16ms
+    )
 
     if (getComputedStyle(this.scroller).position === 'static') {
       this.scroller.style.position = 'relative'
