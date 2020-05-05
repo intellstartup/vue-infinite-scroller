@@ -1,6 +1,6 @@
 {
   "name": "@bgds/infinite-scroller",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Rodrigo Waltenberg (rwaltenberg@gmail.com)",
   "private": false,
   "description": "Infinite scrolling for VueJS",

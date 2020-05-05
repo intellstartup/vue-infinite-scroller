@@ -54,6 +54,11 @@ export default class InfiniteScroller extends Vue {
     end: 0
   }
 
+  private loadingItem = {
+    top: 0,
+    height: 0
+  }
+
   private scrollHeight: number = 0
 
   private anchor = {
@@ -82,6 +87,10 @@ export default class InfiniteScroller extends Vue {
       before: this.threshold,
       after: this.threshold
     }
+  }
+
+  get loading() {
+    return this.hasMore && this.attachedRange.end >= this.items.length - 1
   }
 
   async getScroller() {
@@ -181,7 +190,25 @@ export default class InfiniteScroller extends Vue {
       curPos += item.height
     }
 
+    if (this.loading) {
+      const node = this.$refs.loading as HTMLElement
+
+      this.loadingItem = {
+        top: curPos,
+        height: node.offsetHeight
+      }
+
+      curPos += this.loadingItem.height
+    }
+
     this.scrollHeight = Math.max(this.scrollHeight, curPos)
+  }
+
+  @Watch('loading')
+  onLoadStateChanged(value: boolean, oldValue: boolean) {
+    if (oldValue && !value) {
+      this.scrollHeight -= this.loadingItem.height
+    }
   }
 
   getItem(initial: AnchorItemData, delta: number): AnchorItemData {
@@ -362,7 +389,8 @@ export default class InfiniteScroller extends Vue {
     </component>
     <component
       :is="itemTag"
-      v-if="hasMore && attachedRange.end >= items.length - 1"
+      v-if="loading"
+      ref="loading"
       class="infinite-scroller__item infinite-scroller__item--placeholder"
       :style="{ transform: `translate3d(0, ${scrollHeight}px, 0)` }"
     >
