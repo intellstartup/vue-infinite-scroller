@@ -385,7 +385,7 @@ export default class InfiniteScroller extends Vue {
       class="infinite-scroller__item"
       :style="{ top: `${item.top}px` }"
     >
-      <slot :item="item.data"></slot>
+      <slot :item="item.data" :index="item.index"></slot>
     </component>
     <component
       :is="itemTag"

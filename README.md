@@ -81,10 +81,10 @@ The component has a `@load-more` event that is called when the scroll approaches
 
 ## Slots
 
-| Slot name | Scope           | Default    | Description                                            |
-| --------- | --------------- | ---------- | ------------------------------------------------------ |
-| default   | `{ item: Any }` | -          | each item being loaded on the list                     |
-| loading   | -               | Loading... | the item with a loading message at the end of the list |
+| Slot name | Scope                          | Default    | Description                                            |
+| --------- | ------------------------------ | ---------- | ------------------------------------------------------ |
+| default   | `{ item: Any, index: number }` | -          | each item being loaded on the list                     |
+| loading   | -                              | Loading... | the item with a loading message at the end of the list |
 
 # Contributing
 
