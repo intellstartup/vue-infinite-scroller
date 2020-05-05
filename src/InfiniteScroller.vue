@@ -254,15 +254,14 @@ export default class InfiniteScroller extends Vue {
   }
 
   getVisibleItems() {
+    const el = this.$el as HTMLElement
+
     const lastScreenItem = this.getItem(
       this.anchor.item,
       this.isSelfContained
         ? this.scroller.offsetHeight
         : this.scroller.offsetHeight -
-            Math.max(
-              0,
-              (this.$el as HTMLElement).offsetTop - this.scroller.scrollTop
-            )
+            Math.max(0, el.offsetTop - this.scroller.scrollTop)
     )
 
     return {
