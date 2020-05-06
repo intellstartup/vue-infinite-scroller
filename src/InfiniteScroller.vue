@@ -155,7 +155,7 @@ export default class InfiniteScroller extends Vue {
       return
     }
 
-    for (let i = this.attachedRange.begin; i < this.attachedRange.end; i++) {
+    for (let i = this.attachedRange.begin; i <= this.attachedRange.end; i++) {
       const meta = this.itemsMetadata[i]
       const node = nodes[i - this.attachedRange.begin]
 
@@ -392,7 +392,7 @@ export default class InfiniteScroller extends Vue {
       v-if="loading"
       ref="loading"
       class="infinite-scroller__item infinite-scroller__item--placeholder"
-      :style="{ transform: `translate3d(0, ${scrollHeight}px, 0)` }"
+      :style="{ transform: `translate3d(0, ${loadingItem.top}px, 0)` }"
     >
       <slot name="loading">Loading...</slot>
     </component>
