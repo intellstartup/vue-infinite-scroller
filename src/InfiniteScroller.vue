@@ -383,7 +383,7 @@ export default class InfiniteScroller extends Vue {
       :key="`item-${item.index}`"
       ref="item"
       class="infinite-scroller__item"
-      :style="{ transform: `translate3d(0, ${item.top}px, 0)` }"
+      :style="{ top: `${item.top}px` }"
     >
       <slot :item="item.data"></slot>
     </component>
@@ -392,7 +392,7 @@ export default class InfiniteScroller extends Vue {
       v-if="loading"
       ref="loading"
       class="infinite-scroller__item infinite-scroller__item--placeholder"
-      :style="{ transform: `translate3d(0, ${loadingItem.top}px, 0)` }"
+      :style="{ top: `${loadingItem.top}px` }"
     >
       <slot name="loading">Loading...</slot>
     </component>
@@ -400,20 +400,22 @@ export default class InfiniteScroller extends Vue {
       :is="itemTag"
       ref="scrollPlaceholder"
       class="infinite-scroller__scroll-placeholder"
-      :style="{ transform: `translate3d(0, ${scrollHeight}px, 0)` }"
+      :style="{ top: `${scrollHeight}px,` }"
     ></component>
   </component>
 </template>
 
 <style lang="scss">
 .infinite-scroller {
+  transform: translate3d(0, 0, 0);
+
   &__scroll-placeholder {
     display: block;
     height: 1px;
     opacity: 0;
     pointer-events: none;
     position: absolute;
-    transition: transform 0.2s;
+    transition: top 0.2s;
     width: 1px;
   }
 
