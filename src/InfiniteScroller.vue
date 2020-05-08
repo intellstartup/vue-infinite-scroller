@@ -258,7 +258,7 @@ export default class InfiniteScroller extends Vue {
       this.isSelfContained
         ? this.scroller.offsetHeight
         : this.scroller.offsetHeight -
-            Math.min(
+            Math.max(
               0,
               (this.$el as HTMLElement).offsetTop - this.scroller.scrollTop
             )
