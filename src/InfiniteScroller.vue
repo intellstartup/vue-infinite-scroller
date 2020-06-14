@@ -28,7 +28,7 @@ export default class InfiniteScroller extends Vue {
   @Prop({ type: Boolean, default: false })
   private readonly hasMore!: boolean
 
-  @Prop({ type: [Number, Array], default: () => [50, 10] })
+  @Prop({ type: [Number, Array], default: () => [10, 10] })
   private readonly threshold!: number | [number, number]
 
   @Prop({ type: String, default: () => 'div' })
@@ -70,10 +70,16 @@ export default class InfiniteScroller extends Vue {
   private observer: MutationObserver | null = null
 
   get attached() {
-    return this.itemsMetadata.slice(
-      this.attachedRange.begin,
-      this.attachedRange.end + 1
-    )
+    const items = this.itemsMetadata
+      .slice(this.attachedRange.begin, this.attachedRange.end + 1)
+      .map((meta, index) => {
+        return {
+          index,
+          meta
+        }
+      })
+
+    return items
   }
 
   get calculatedThreshold() {
@@ -302,7 +308,8 @@ export default class InfiniteScroller extends Vue {
     this.scroller.classList.add('infinite-scroller__scroller')
     this.scroller.addEventListener(
       'scroll',
-      throttle(this.onScroll.bind(this), 16) // 60fps ~= 16ms
+      throttle(this.onScroll.bind(this), 16), // 60fps ~= 16ms
+      { passive: true }
     )
 
     if (getComputedStyle(this.scroller).position === 'static') {
@@ -333,20 +340,18 @@ export default class InfiniteScroller extends Vue {
 
       await this.$nextTick()
 
-      const attachedHeight = this.attached.reduce(
-        (sum, item) => sum + item.height,
-        0
-      )
+      const attachedHeight = this.attached
+        .map(item => item.meta)
+        .reduce((sum, item) => sum + item.height, 0)
 
       this.updateMetadata()
       this.updatePositions()
 
       await this.$nextTick()
 
-      const newHeight = this.attached.reduce(
-        (sum, item) => sum + item.height,
-        0
-      )
+      const newHeight = this.attached
+        .map(item => item.meta)
+        .reduce((sum, item) => sum + item.height, 0)
 
       const heightDiff = newHeight - attachedHeight
 
@@ -386,9 +391,9 @@ export default class InfiniteScroller extends Vue {
       :key="`item-${item.index}`"
       ref="item"
       class="infinite-scroller__item"
-      :style="{ top: `${item.top}px` }"
+      :style="{ top: `${item.meta.top}px` }"
     >
-      <slot :item="item.data" :index="item.index"></slot>
+      <slot :item="item.meta.data" :index="item.meta.index"></slot>
     </component>
     <component
       :is="itemTag"

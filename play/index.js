@@ -1,4 +1,5 @@
 import InfiniteScroller from '../src/InfiniteScroller.vue'
+import SlowItem from './components/SlowItem.vue'
 import Vue from 'vue'
 import { play } from 'vue-play'
 
@@ -112,5 +113,75 @@ play('InfiniteScroller')
       >
         <template slot-scope="{item}">{{ item }}</template>
       </infinite-scroller>
+    `
+  })
+  .add('Slow component', {
+    components: {
+      SlowItem
+    },
+    data() {
+      return {
+        items: [],
+        limit: 10,
+        hasMore: true,
+        loading: false
+      }
+    },
+    mounted() {
+      this.getItems()
+    },
+    methods: {
+      getItems() {
+        const url = 'https://graphql-pokemon.now.sh/graphql'
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            query: `{
+              pokemons (first: ${this.limit}) {
+                id
+              }
+            }`
+          })
+        }
+
+        return fetch(url, options)
+          .then(response => response.json())
+          .then(json => {
+            this.items = json.data.pokemons
+            this.loading = false
+          })
+      },
+      more(from) {
+        if (this.limit > 150) {
+          this.hasMore = false
+          return
+        }
+
+        if (this.loading) {
+          return
+        }
+
+        this.loading = true
+        this.limit += 10
+
+        this.getItems()
+      }
+    },
+    template: `
+      <div class="slow-components" style="height: 500px; overflow: auto;">
+        <infinite-scroller
+          :items="items"
+          :has-more="hasMore"
+          :threshold="[20, 10]"
+          @load-more="more"
+        >
+          <template slot-scope="{ item, index }">
+            <component is="SlowItem" :id="item.id" :index="index" />
+          </template>
+        </infinite-scroller>
+      </div>
     `
   })
